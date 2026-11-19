@@ -77,8 +77,10 @@ export function Header({
           })}
         </nav>
 
-        {/* Zone 3: 1 primary action */}
-        <div className="flex items-center gap-3 shrink-0">
+        {/* Zone 3: Theme toggle + primary action */}
+        <div className="flex items-center gap-2.5 shrink-0">
+          <ThemeToggle compact />
+
           <button
             type="button"
             onClick={onOpenCreate}

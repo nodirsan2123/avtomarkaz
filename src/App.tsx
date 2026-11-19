@@ -8,7 +8,6 @@ import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { MyListingsView } from './components/MyListingsView';
-import { ThemeToggle } from './components/ThemeToggle';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { SHOWCASE_CARS } from './data/showcaseCars';
@@ -325,8 +324,6 @@ function MarketplaceContent() {
                     <option value="price_desc">Avval qimmatroq</option>
                     <option value="mileage_asc">Kam yurgan</option>
                   </select>
-
-                  <ThemeToggle />
                 </div>
               </div>
 
