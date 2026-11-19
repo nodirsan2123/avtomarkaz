@@ -269,6 +269,28 @@
         }
       },
       "required": ["listingId", "createdAt"]
+    },
+    "AdminRole": {
+      "title": "AdminRole",
+      "description": "Granted administrator role record keyed by user UID.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "createdAt"]
     }
   },
   "firestore": {
@@ -277,6 +299,12 @@
         "$ref": "#/entities/UserProfile"
       },
       "description": "Private user account documents keyed by Firebase Auth UID."
+    },
+    "/admins/{adminId}": {
+      "schema": {
+        "$ref": "#/entities/AdminRole"
+      },
+      "description": "Administrator role grants keyed by user UID."
     },
     "/listings/{listingId}": {
       "schema": {

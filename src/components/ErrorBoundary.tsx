@@ -30,22 +30,22 @@ export class ErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center p-6">
-          <div className="max-w-md w-full bg-white border border-zinc-200 rounded-xl p-8">
-            <h2 className="text-xl font-semibold text-zinc-950 mb-2">
+        <div className="min-h-screen bg-[#FAFAFA] dark:bg-zinc-950 flex items-center justify-center p-6">
+          <div className="max-w-md w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-8">
+            <h2 className="text-xl font-semibold text-zinc-950 dark:text-zinc-50 mb-2">
               Xatolik yuz berdi
             </h2>
-            <p className="text-sm text-zinc-600 leading-relaxed mb-6">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
               Ma&apos;lumotlarni yuklash yoki saqlash jarayonida muammo yuzaga keldi.
               Sahifani qayta yuklab ko&apos;ring.
             </p>
-            <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-3 text-xs text-zinc-600 font-mono mb-6 break-words">
+            <div className="bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-xs text-zinc-600 dark:text-zinc-400 font-mono mb-6 break-words">
               {this.state.message}
             </div>
             <button
               type="button"
               onClick={() => window.location.reload()}
-              className="w-full py-2.5 px-4 bg-blue-700 hover:bg-blue-800 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
+              className="w-full py-2.5 px-4 bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
             >
               Sahifani yangilash
             </button>

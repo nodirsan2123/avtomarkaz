@@ -229,18 +229,18 @@ export function CreateListingModal({
       aria-label={isEditing ? "E'lonni tahrirlash" : "Yangi e'lon joylash"}
     >
       <div
-        className="w-full max-w-3xl bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-2xl my-4 sm:my-8"
+        className="w-full max-w-3xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-2xl my-4 sm:my-8"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="px-6 py-4 border-b border-zinc-200 flex items-center justify-between">
-          <h2 className="font-display text-lg font-semibold text-zinc-950">
+        <div className="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+          <h2 className="font-display text-lg font-semibold text-zinc-950 dark:text-zinc-50">
             {isEditing ? "E'lonni tahrirlash" : "Yangi avtomobil e'loni joylash"}
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Yopish"
-            className="w-10 h-10 inline-flex items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors cursor-pointer"
+            className="w-10 h-10 inline-flex items-center justify-center rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -248,10 +248,10 @@ export function CreateListingModal({
 
         {!user ? (
           <div className="p-8 text-center space-y-4">
-            <h3 className="font-display text-xl font-semibold text-zinc-950">
+            <h3 className="font-display text-xl font-semibold text-zinc-950 dark:text-zinc-50">
               E&apos;lon joylash uchun hisobga kiring
             </h3>
-            <p className="text-sm text-zinc-600 max-w-md mx-auto">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto">
               E&apos;lonlaringizni boshqarish, narxlarni tahrirlash va xaridorlar
               takliflarini qabul qilish uchun Google hisobingiz bilan kiring.
             </p>
@@ -259,7 +259,7 @@ export function CreateListingModal({
               type="button"
               disabled={authLoading}
               onClick={() => void signInWithGoogle()}
-              className="min-h-[44px] px-6 py-2.5 bg-blue-700 hover:bg-blue-800 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
+              className="min-h-[44px] px-6 py-2.5 bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
             >
               {authLoading ? 'Kirilmoqda...' : 'Google bilan kirish'}
             </button>
@@ -267,8 +267,8 @@ export function CreateListingModal({
         ) : (
           <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6">
             {/* Image Picker & Preview */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start pb-6 border-b border-zinc-200">
-              <div className="md:col-span-4 h-44 w-full rounded-xl overflow-hidden border border-zinc-200 bg-zinc-100">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start pb-6 border-b border-zinc-200 dark:border-zinc-800">
+              <div className="md:col-span-4 h-44 w-full rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800">
                 <CarVisual
                   imageUrl={imageMode === 'preset' ? '' : imageUrl}
                   presetKey={presetKey}
@@ -277,18 +277,18 @@ export function CreateListingModal({
               </div>
 
               <div className="md:col-span-8 space-y-3">
-                <div className="text-xs font-semibold text-zinc-900">
+                <div className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
                   Avtomobil rasmi
                 </div>
 
-                <div className="flex flex-wrap gap-1 p-1 bg-zinc-100 rounded-lg w-fit">
+                <div className="flex flex-wrap gap-1 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-lg w-fit">
                   <button
                     type="button"
                     onClick={() => setImageMode('preset')}
                     className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors cursor-pointer ${
                       imageMode === 'preset'
-                        ? 'bg-white text-zinc-950 shadow-xs'
-                        : 'text-zinc-600 hover:text-zinc-950'
+                        ? 'bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50 shadow-xs'
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100'
                     }`}
                   >
                     Studiya andozasi
@@ -298,8 +298,8 @@ export function CreateListingModal({
                     onClick={() => setImageMode('upload')}
                     className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors cursor-pointer ${
                       imageMode === 'upload'
-                        ? 'bg-white text-zinc-950 shadow-xs'
-                        : 'text-zinc-600 hover:text-zinc-950'
+                        ? 'bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50 shadow-xs'
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100'
                     }`}
                   >
                     Qurilmadan yuklash
@@ -309,8 +309,8 @@ export function CreateListingModal({
                     onClick={() => setImageMode('url')}
                     className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors cursor-pointer ${
                       imageMode === 'url'
-                        ? 'bg-white text-zinc-950 shadow-xs'
-                        : 'text-zinc-600 hover:text-zinc-950'
+                        ? 'bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50 shadow-xs'
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100'
                     }`}
                   >
                     Rasm havolasi
@@ -326,12 +326,12 @@ export function CreateListingModal({
                         onClick={() => setPresetKey(studio.key)}
                         className={`px-3 py-2 text-xs text-left rounded-lg border transition-colors cursor-pointer flex items-center gap-2 ${
                           presetKey === studio.key
-                            ? 'border-blue-700 bg-blue-50 text-blue-900 font-medium'
-                            : 'border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300'
+                            ? 'border-blue-700 dark:border-blue-500 bg-blue-50 dark:bg-blue-950/50 text-blue-900 dark:text-blue-200 font-medium'
+                            : 'border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-600'
                         }`}
                       >
                         <span
-                          className="w-3 h-3 rounded-full border border-zinc-300 shrink-0"
+                          className="w-3 h-3 rounded-full border border-zinc-300 dark:border-zinc-600 shrink-0"
                           style={{ backgroundColor: studio.paintHex }}
                         />
                         <span className="truncate">{studio.label}</span>
@@ -341,12 +341,12 @@ export function CreateListingModal({
                 )}
 
                 {imageMode === 'upload' && (
-                  <label className="flex items-center justify-center gap-2 px-4 py-4 border border-dashed border-zinc-300 rounded-xl bg-zinc-50 hover:bg-zinc-100 transition-colors cursor-pointer text-xs text-zinc-700">
+                  <label className="flex items-center justify-center gap-2 px-4 py-4 border border-dashed border-zinc-300 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-950 hover:bg-zinc-100 dark:hover:bg-zinc-800/70 transition-colors cursor-pointer text-xs text-zinc-700 dark:text-zinc-300">
                     {uploadingImage ? (
                       <span>Rasm tayyorlanmoqda...</span>
                     ) : (
                       <>
-                        <Upload className="w-4 h-4 text-zinc-500" />
+                        <Upload className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
                         <span>JPG yoki PNG rasm tanlang (avtomatik siqiladi)</span>
                       </>
                     )}
@@ -367,7 +367,7 @@ export function CreateListingModal({
                       value={imageUrl}
                       onChange={(e) => setImageUrl(e.target.value)}
                       placeholder="https://..."
-                      className="w-full px-3 py-2 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                      className="w-full px-3 py-2 text-sm bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-400 border border-zinc-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
                     />
                   </div>
                 )}
@@ -377,13 +377,13 @@ export function CreateListingModal({
             {/* Core Specs */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                   Marka
                 </label>
                 <select
                   value={brand}
                   onChange={(e) => setBrand(e.target.value)}
-                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-700"
                 >
                   {BRAND_OPTIONS.map((b) => (
                     <option key={b} value={b}>
@@ -394,7 +394,7 @@ export function CreateListingModal({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                   Model
                 </label>
                 <input
@@ -403,13 +403,13 @@ export function CreateListingModal({
                   value={model}
                   onChange={(e) => setModel(e.target.value)}
                   placeholder="Malibu 2 XL"
-                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className="w-full px-3 min-h-[42px] text-sm bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 border border-zinc-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                   Ishlab chiqarilgan yil
                 </label>
                 <input
@@ -418,7 +418,7 @@ export function CreateListingModal({
                   max={VALIDATION_LIMITS.yearMax}
                   value={year}
                   onChange={(e) => setYear(e.target.value)}
-                  className="w-full px-3 min-h-[42px] text-sm font-mono-num border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className="w-full px-3 min-h-[42px] text-sm font-mono-num bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
                   required
                 />
               </div>
@@ -426,7 +426,7 @@ export function CreateListingModal({
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                   Narxi (USD $)
                 </label>
                 <input
@@ -436,13 +436,13 @@ export function CreateListingModal({
                   value={priceUsd}
                   onChange={(e) => setPriceUsd(e.target.value)}
                   placeholder="24500"
-                  className="w-full px-3 min-h-[42px] text-sm font-mono-num border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className="w-full px-3 min-h-[42px] text-sm font-mono-num bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 border border-zinc-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                   Holati
                 </label>
                 <select
@@ -452,7 +452,7 @@ export function CreateListingModal({
                     setCondition(val);
                     if (val === 'Yangi') setMileageKm('0');
                   }}
-                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-700"
                 >
                   {CONDITION_OPTIONS.map((c) => (
                     <option key={c} value={c}>
@@ -463,7 +463,7 @@ export function CreateListingModal({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                   Yurgani (km)
                 </label>
                 <input
@@ -473,7 +473,7 @@ export function CreateListingModal({
                   disabled={condition === 'Yangi'}
                   value={condition === 'Yangi' ? '0' : mileageKm}
                   onChange={(e) => setMileageKm(e.target.value)}
-                  className="w-full px-3 min-h-[42px] text-sm font-mono-num border border-zinc-200 rounded-lg disabled:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className="w-full px-3 min-h-[42px] text-sm font-mono-num bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 rounded-lg disabled:bg-zinc-100 dark:disabled:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-blue-700"
                   required
                 />
               </div>
@@ -481,13 +481,13 @@ export function CreateListingModal({
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div>
-                <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                   Yoqilg&apos;i
                 </label>
                 <select
                   value={fuelType}
                   onChange={(e) => setFuelType(e.target.value as FuelType)}
-                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-700"
                 >
                   {FUEL_OPTIONS.map((f) => (
                     <option key={f} value={f}>
@@ -498,13 +498,13 @@ export function CreateListingModal({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                   Uzatma qutisi
                 </label>
                 <select
                   value={transmission}
                   onChange={(e) => setTransmission(e.target.value as Transmission)}
-                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-700"
                 >
                   {TRANSMISSION_OPTIONS.map((t) => (
                     <option key={t} value={t}>
@@ -515,13 +515,13 @@ export function CreateListingModal({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                   Kuzov turi
                 </label>
                 <select
                   value={bodyStyle}
                   onChange={(e) => setBodyStyle(e.target.value as BodyStyle)}
-                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-700"
                 >
                   {BODY_OPTIONS.map((b) => (
                     <option key={b} value={b}>
@@ -532,7 +532,7 @@ export function CreateListingModal({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                   Rangi
                 </label>
                 <input
@@ -541,7 +541,7 @@ export function CreateListingModal({
                   value={color}
                   onChange={(e) => setColor(e.target.value)}
                   placeholder="Oq"
-                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className="w-full px-3 min-h-[42px] text-sm bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-400 border border-zinc-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
                   required
                 />
               </div>
@@ -550,10 +550,10 @@ export function CreateListingModal({
             {/* Description */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-medium text-zinc-700">
+                <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                   Avtomobil haqida batafsil
                 </label>
-                <span className="text-xs font-mono-num text-zinc-400">
+                <span className="text-xs font-mono-num text-zinc-400 dark:text-zinc-500">
                   {description.length}/{VALIDATION_LIMITS.descriptionMax}
                 </span>
               </div>
@@ -563,21 +563,21 @@ export function CreateListingModal({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Kraska holati, jihozlari, qo'shimcha qulayliklar va savdo shartlari..."
-                className="w-full px-3 py-2.5 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 resize-none"
+                className="w-full px-3 py-2.5 text-sm bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 border border-zinc-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 resize-none"
                 required
               />
             </div>
 
             {/* Contact Info */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-zinc-200">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-zinc-200 dark:border-zinc-800">
               <div>
-                <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                   Shahar
                 </label>
                 <select
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-700"
                 >
                   {CITY_OPTIONS.map((c) => (
                     <option key={c} value={c}>
@@ -588,7 +588,7 @@ export function CreateListingModal({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                   Telefon (+998901234567)
                 </label>
                 <input
@@ -596,13 +596,13 @@ export function CreateListingModal({
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+998901234567"
-                  className="w-full px-3 min-h-[42px] text-sm font-mono-num border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className="w-full px-3 min-h-[42px] text-sm font-mono-num bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-400 border border-zinc-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                   Telegram (ixtiyoriy)
                 </label>
                 <input
@@ -611,13 +611,13 @@ export function CreateListingModal({
                   value={telegram}
                   onChange={(e) => setTelegram(e.target.value)}
                   placeholder="@username"
-                  className="w-full px-3 min-h-[42px] text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className="w-full px-3 min-h-[42px] text-sm bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-400 border border-zinc-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
                 />
               </div>
             </div>
 
             {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700">
+              <div className="p-3 bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900 rounded-lg text-xs text-red-700 dark:text-red-300">
                 {error}
               </div>
             )}
@@ -626,14 +626,14 @@ export function CreateListingModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="min-h-[44px] px-5 py-2.5 bg-white border border-zinc-200 hover:border-zinc-300 text-zinc-700 text-sm font-medium rounded-lg transition-colors cursor-pointer"
+                className="min-h-[44px] px-5 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 text-zinc-700 dark:text-zinc-300 text-sm font-medium rounded-lg transition-colors cursor-pointer"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
                 disabled={submitting || uploadingImage}
-                className="min-h-[44px] px-6 py-2.5 bg-blue-700 hover:bg-blue-800 disabled:opacity-60 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
+                className="min-h-[44px] px-6 py-2.5 bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-500 disabled:opacity-60 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
               >
                 {submitting
                   ? 'Saqlanmoqda...'

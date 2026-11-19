@@ -87,9 +87,11 @@ const PRESET_THEMES: Record<
 function StudioCarSvg({
   presetKey,
   darkBackdrop,
+  className = '',
 }: {
   presetKey: PresetKey;
   darkBackdrop?: boolean;
+  className?: string;
 }) {
   const theme = PRESET_THEMES[presetKey] || PRESET_THEMES.white_sedan;
   const gradId = `paint-${presetKey}-${darkBackdrop ? 'dark' : 'light'}`;
@@ -99,7 +101,7 @@ function StudioCarSvg({
       className={`w-full h-full flex items-center justify-center relative overflow-hidden ${
         darkBackdrop
           ? 'bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-800'
-          : `bg-gradient-to-br ${theme.studioBg}`
+          : `bg-gradient-to-br ${theme.studioBg} dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800`
       }`}
     >
       {/* Subtle architectural studio horizon */}
@@ -107,13 +109,13 @@ function StudioCarSvg({
         className={`absolute inset-x-0 bottom-0 h-[34%] border-t ${
           darkBackdrop
             ? 'bg-zinc-950/60 border-white/10'
-            : 'bg-zinc-200/45 border-zinc-300/60'
+            : 'bg-zinc-200/45 dark:bg-zinc-950/60 border-zinc-300/60 dark:border-white/10'
         }`}
       />
 
       <svg
         viewBox="0 0 640 380"
-        className="w-[88%] h-auto relative z-10 select-none"
+        className={`w-[88%] h-auto relative z-10 select-none ${className}`}
         aria-hidden="true"
       >
         <defs>
@@ -283,5 +285,11 @@ export function CarVisual({
     );
   }
 
-  return <StudioCarSvg presetKey={presetKey} darkBackdrop={darkBackdrop} />;
+  return (
+    <StudioCarSvg
+      presetKey={presetKey}
+      darkBackdrop={darkBackdrop}
+      className={className}
+    />
+  );
 }

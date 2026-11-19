@@ -13,7 +13,13 @@ export type PresetKey =
   | 'slate_crossover';
 
 export type SortOption = 'newest' | 'price_asc' | 'price_desc' | 'mileage_asc';
-export type NavTab = 'all' | 'new' | 'saved' | 'mine';
+export type NavTab = 'all' | 'new' | 'saved' | 'mine' | 'admin';
+
+export interface AdminRole {
+  uid: string;
+  note?: string;
+  createdAtMs: number;
+}
 
 export interface CarListing {
   id: string;

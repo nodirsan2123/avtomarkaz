@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { AdminView } from './components/AdminView';
 import { CarCard } from './components/CarCard';
 import { CarDetailModal } from './components/CarDetailModal';
 import { CreateListingModal } from './components/CreateListingModal';
@@ -7,7 +8,9 @@ import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { MyListingsView } from './components/MyListingsView';
+import { ThemeToggle } from './components/ThemeToggle';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { SHOWCASE_CARS } from './data/showcaseCars';
 import {
   subscribeToFavorites,
@@ -29,7 +32,7 @@ const BRAND_FILTER_TABS = [
 const LOCAL_SAVED_KEY = 'avtomarkaz_saved_ids';
 
 function MarketplaceContent() {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
 
   const [dbListings, setDbListings] = useState<CarListing[]>([]);
   const [listingsLoaded, setListingsLoaded] = useState(false);
@@ -218,14 +221,14 @@ function MarketplaceContent() {
   };
 
   const scrollToCatalog = () => {
-    if (activeTab === 'mine' || activeTab === 'saved') {
+    if (activeTab === 'mine' || activeTab === 'saved' || activeTab === 'admin') {
       setActiveTab('all');
     }
     catalogRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFAFA] text-zinc-950">
+    <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100">
       <Header
         activeTab={activeTab}
         onSelectTab={handleSelectTab}
@@ -235,10 +238,16 @@ function MarketplaceContent() {
         }}
         savedCount={favoriteIds.size}
         myListingsCount={myListings.length}
+        isAdmin={isAdmin}
       />
 
       <main className="flex-1">
-        {activeTab === 'mine' ? (
+        {activeTab === 'admin' ? (
+          <AdminView
+            listings={dbListings}
+            onSelectCar={(car) => setSelectedCarId(car.id)}
+          />
+        ) : activeTab === 'mine' ? (
           <MyListingsView
             myListings={myListings}
             favoriteIds={favoriteIds}
@@ -273,21 +282,21 @@ function MarketplaceContent() {
               {/* Section Header & Sort Controls */}
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                  <h2 className="font-display text-2xl font-bold text-zinc-950">
+                  <h2 className="font-display text-2xl font-bold text-zinc-950 dark:text-zinc-50">
                     {activeTab === 'saved'
                       ? 'Saqlangan avtomobillar'
                       : activeTab === 'new'
                       ? 'Yangi avtomobillar'
                       : "Barcha e'lonlar"}
                   </h2>
-                  <p className="text-xs text-zinc-500 mt-1">
-                    Topildi: <span className="font-mono-num font-medium text-zinc-900">{filteredCars.length}</span> ta avtomobil
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                    Topildi: <span className="font-mono-num font-medium text-zinc-900 dark:text-zinc-100">{filteredCars.length}</span> ta avtomobil
                   </p>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3">
                   {/* Condition Segmented Control */}
-                  <div className="flex items-center gap-1 p-1 bg-zinc-100 rounded-lg border border-zinc-200/80">
+                  <div className="flex items-center gap-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-lg border border-zinc-200/80 dark:border-zinc-800">
                     {(['all', 'Yangi', 'Minilgan'] as const).map((cond) => (
                       <button
                         key={cond}
@@ -295,8 +304,8 @@ function MarketplaceContent() {
                         onClick={() => setConditionFilter(cond)}
                         className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                           conditionFilter === cond
-                            ? 'bg-white text-zinc-950 shadow-xs'
-                            : 'text-zinc-600 hover:text-zinc-950'
+                            ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-xs'
+                            : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100'
                         }`}
                       >
                         {cond === 'all' ? 'Barchasi' : cond}
@@ -309,13 +318,15 @@ function MarketplaceContent() {
                     value={sortOption}
                     onChange={(e) => setSortOption(e.target.value as SortOption)}
                     aria-label="Saralash"
-                    className="px-3 min-h-[38px] text-xs font-medium text-zinc-800 bg-white border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 cursor-pointer"
+                    className="px-3 min-h-[38px] text-xs font-medium text-zinc-800 dark:text-zinc-200 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 cursor-pointer"
                   >
                     <option value="newest">Eng yangi</option>
                     <option value="price_asc">Avval arzonroq</option>
                     <option value="price_desc">Avval qimmatroq</option>
                     <option value="mileage_asc">Kam yurgan</option>
                   </select>
+
+                  <ThemeToggle />
                 </div>
               </div>
 
@@ -330,8 +341,8 @@ function MarketplaceContent() {
                       onClick={() => setSelectedBrand(brand)}
                       className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                         isActive
-                          ? 'bg-zinc-950 border-zinc-950 text-white'
-                          : 'bg-white border-zinc-200 text-zinc-700 hover:border-zinc-300 hover:text-zinc-950'
+                          ? 'bg-zinc-950 dark:bg-zinc-100 border-zinc-950 dark:border-zinc-100 text-white dark:text-zinc-950'
+                          : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-950 dark:hover:text-white'
                       }`}
                     >
                       {brand}
@@ -346,18 +357,18 @@ function MarketplaceContent() {
                   {[1, 2, 3].map((n) => (
                     <div
                       key={n}
-                      className="h-80 bg-white border border-zinc-200 rounded-xl animate-pulse"
+                      className="h-80 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl animate-pulse"
                     />
                   ))}
                 </div>
               ) : filteredCars.length === 0 ? (
-                <div className="bg-white border border-zinc-200 rounded-2xl p-12 text-center space-y-3">
-                  <h3 className="font-display text-lg font-semibold text-zinc-950">
+                <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-12 text-center space-y-3">
+                  <h3 className="font-display text-lg font-semibold text-zinc-950 dark:text-zinc-50">
                     {activeTab === 'saved'
                       ? "Saqlangan avtomobillar yo'q"
                       : "So'rovingiz bo'yicha avtomobil topilmadi"}
                   </h3>
-                  <p className="text-sm text-zinc-600 max-w-md mx-auto">
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto">
                     {activeTab === 'saved'
                       ? "Yoqtirgan avtomobillaringizdagi saqlash tugmasini bosing va ular shu yerda jamlanadi."
                       : "Qidiruv shartlarini o'zgartiring yoki filtrlarni tozalab qayta ko'ring."}
@@ -371,7 +382,7 @@ function MarketplaceContent() {
                         resetFilters();
                       }
                     }}
-                    className="mt-2 min-h-[40px] px-5 py-2 bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-medium rounded-lg transition-colors cursor-pointer"
+                    className="mt-2 min-h-[40px] px-5 py-2 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-white text-white dark:text-zinc-950 text-xs font-medium rounded-lg transition-colors cursor-pointer"
                   >
                     {activeTab === 'saved' ? "Katalogga qaytish" : 'Filtrlarni tozalash'}
                   </button>
@@ -401,6 +412,7 @@ function MarketplaceContent() {
           setCreateModalOpen(true);
         }}
         totalCount={combinedListings.length}
+        isAdmin={isAdmin}
       />
 
       {selectedCar && (
@@ -438,9 +450,11 @@ function MarketplaceContent() {
 export default function App() {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <MarketplaceContent />
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <MarketplaceContent />
+        </AuthProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }

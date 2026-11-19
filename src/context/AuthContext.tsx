@@ -21,9 +21,12 @@ import {
 } from '../lib/firebase';
 import { UserProfile, VALIDATION_LIMITS } from '../types/car';
 
+const BOOTSTRAP_ADMIN_EMAIL = 'bronodir094@gmail.com';
+
 interface AuthContextValue {
   user: User | null;
   profile: UserProfile | null;
+  isAdmin: boolean;
   authReady: boolean;
   authLoading: boolean;
   authError: string | null;
@@ -42,6 +45,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [authReady, setAuthReady] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -51,9 +55,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(firebaseUser);
       if (!firebaseUser) {
         setProfile(null);
+        setIsAdmin(false);
         setAuthReady(true);
         return;
       }
+
+      const isBootstrapAdmin =
+        Boolean(firebaseUser.emailVerified) &&
+        firebaseUser.email?.toLowerCase() === BOOTSTRAP_ADMIN_EMAIL;
 
       const userPath = `users/${firebaseUser.uid}`;
       try {
@@ -95,6 +104,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             city: 'Toshkent',
           });
         }
+
+        if (isBootstrapAdmin) {
+          setIsAdmin(true);
+        } else {
+          const adminSnap = await getDoc(doc(db, 'admins', firebaseUser.uid));
+          setIsAdmin(adminSnap.exists());
+        }
       } catch (error) {
         handleFirestoreError(error, OperationType.GET, userPath);
       } finally {
@@ -127,6 +143,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await firebaseSignOut(auth);
       setProfile(null);
+      setIsAdmin(false);
     } finally {
       setAuthLoading(false);
     }
@@ -177,6 +194,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         user,
         profile,
+        isAdmin,
         authReady,
         authLoading,
         authError,

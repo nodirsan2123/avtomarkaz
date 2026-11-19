@@ -115,22 +115,22 @@ export function MyListingsView({
   if (!user) {
     return (
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="max-w-lg mx-auto bg-white border border-zinc-200 rounded-2xl p-8 text-center space-y-4">
-          <h2 className="font-display text-2xl font-bold text-zinc-950">
+        <div className="max-w-lg mx-auto bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-8 text-center space-y-4">
+          <h2 className="font-display text-2xl font-bold text-zinc-950 dark:text-zinc-50">
             Shaxsiy kabinet
           </h2>
-          <p className="text-sm text-zinc-600 leading-relaxed">
+          <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
             O&apos;z avtomobil e&apos;lonlaringizni joylashtirish, narxlarni yangilash
             va xaridorlardan kelgan takliflarni ko&apos;rish uchun hisobingizga kiring.
           </p>
           {authError && (
-            <p className="text-xs text-red-600">{authError}</p>
+            <p className="text-xs text-red-600 dark:text-red-400">{authError}</p>
           )}
           <button
             type="button"
             disabled={authLoading}
             onClick={() => void signInWithGoogle()}
-            className="min-h-[44px] px-6 py-2.5 bg-blue-700 hover:bg-blue-800 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
+            className="min-h-[44px] px-6 py-2.5 bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
           >
             {authLoading ? 'Kirilmoqda...' : 'Google bilan kirish'}
           </button>
@@ -142,14 +142,14 @@ export function MyListingsView({
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
       {/* Account Summary Header */}
-      <div className="bg-white border border-zinc-200 rounded-2xl p-6 sm:p-8">
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="text-xs text-zinc-500">Sotuvchi profili</div>
-            <h2 className="font-display text-2xl font-bold text-zinc-950 mt-1">
+            <div className="text-xs text-zinc-500 dark:text-zinc-400">Sotuvchi profili</div>
+            <h2 className="font-display text-2xl font-bold text-zinc-950 dark:text-zinc-50 mt-1">
               {profile?.displayName || user.displayName || 'Foydalanuvchi'}
             </h2>
-            <p className="text-xs text-zinc-500 mt-1">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
               {user.email}
               {profile?.city ? ` · ${profile.city}` : ''}
               {profile?.phone ? ` · ${profile.phone}` : ''}
@@ -163,7 +163,7 @@ export function MyListingsView({
                 setEditingProfile((prev) => !prev);
                 setProfileSaved(false);
               }}
-              className="min-h-[40px] px-3.5 py-2 bg-white border border-zinc-200 hover:border-zinc-300 text-zinc-800 text-xs font-medium rounded-lg inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="min-h-[40px] px-3.5 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 text-zinc-800 dark:text-zinc-200 text-xs font-medium rounded-lg inline-flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Settings className="w-3.5 h-3.5" />
               <span>Profilni sozlash</span>
@@ -171,7 +171,7 @@ export function MyListingsView({
             <button
               type="button"
               onClick={() => void signOut()}
-              className="min-h-[40px] px-3.5 py-2 bg-white border border-zinc-200 hover:border-zinc-300 text-zinc-700 text-xs font-medium rounded-lg inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="min-h-[40px] px-3.5 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 text-zinc-700 dark:text-zinc-300 text-xs font-medium rounded-lg inline-flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Chiqish</span>
@@ -180,7 +180,7 @@ export function MyListingsView({
         </div>
 
         {profileSaved && (
-          <p className="mt-4 text-xs text-emerald-700 font-medium">
+          <p className="mt-4 text-xs text-emerald-700 dark:text-emerald-400 font-medium">
             Profil ma&apos;lumotlari yangilandi.
           </p>
         )}
@@ -188,10 +188,10 @@ export function MyListingsView({
         {editingProfile && (
           <form
             onSubmit={handleSaveProfile}
-            className="mt-6 pt-6 border-t border-zinc-200 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end"
+            className="mt-6 pt-6 border-t border-zinc-200 dark:border-zinc-800 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end"
           >
             <div>
-              <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+              <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                 Ism
               </label>
               <input
@@ -199,13 +199,13 @@ export function MyListingsView({
                 maxLength={VALIDATION_LIMITS.sellerNameMax}
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                className="w-full px-3 min-h-[40px] text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                className="w-full px-3 min-h-[40px] text-sm bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+              <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                 Telefon (+998901234567)
               </label>
               <input
@@ -213,18 +213,18 @@ export function MyListingsView({
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+998901234567"
-                className="w-full px-3 min-h-[40px] text-sm font-mono-num border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                className="w-full px-3 min-h-[40px] text-sm font-mono-num bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+              <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                 Shahar
               </label>
               <select
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                className="w-full px-3 min-h-[40px] text-sm border border-zinc-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-700"
+                className="w-full px-3 min-h-[40px] text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-700"
               >
                 {CITY_OPTIONS.map((c) => (
                   <option key={c} value={c}>
@@ -237,13 +237,13 @@ export function MyListingsView({
             <button
               type="submit"
               disabled={profileSaving}
-              className="min-h-[40px] px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
+              className="min-h-[40px] px-4 py-2 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-white text-white dark:text-zinc-950 text-sm font-medium rounded-lg transition-colors cursor-pointer"
             >
               {profileSaving ? 'Saqlanmoqda...' : 'Saqlash'}
             </button>
 
             {profileError && (
-              <p className="sm:col-span-4 text-xs text-red-600">{profileError}</p>
+              <p className="sm:col-span-4 text-xs text-red-600 dark:text-red-400">{profileError}</p>
             )}
           </form>
         )}
@@ -252,13 +252,13 @@ export function MyListingsView({
       {/* My Listings Grid */}
       <div className="space-y-5">
         <div className="flex items-center justify-between gap-4">
-          <h3 className="font-display text-xl font-semibold text-zinc-950">
+          <h3 className="font-display text-xl font-semibold text-zinc-950 dark:text-zinc-50">
             Mening e&apos;lonlarim ({myListings.length})
           </h3>
           <button
             type="button"
             onClick={onOpenCreate}
-            className="min-h-[40px] px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-xs font-medium rounded-lg inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="min-h-[40px] px-4 py-2 bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white text-xs font-medium rounded-lg inline-flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Yangi e&apos;lon</span>
@@ -266,18 +266,18 @@ export function MyListingsView({
         </div>
 
         {myListings.length === 0 ? (
-          <div className="bg-white border border-zinc-200 rounded-2xl p-12 text-center space-y-3">
-            <h4 className="font-display text-lg font-semibold text-zinc-950">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-12 text-center space-y-3">
+            <h4 className="font-display text-lg font-semibold text-zinc-950 dark:text-zinc-50">
               Hozircha e&apos;lonlaringiz yo&apos;q
             </h4>
-            <p className="text-sm text-zinc-600 max-w-md mx-auto">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto">
               Birinchi avtomobilingizni joylang — u darhol barcha xaridorlarga
               ko&apos;rinadi.
             </p>
             <button
               type="button"
               onClick={onOpenCreate}
-              className="mt-2 min-h-[44px] px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
+              className="mt-2 min-h-[44px] px-5 py-2.5 bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
             >
               E&apos;lon joylash
             </button>
@@ -299,30 +299,30 @@ export function MyListingsView({
 
       {/* Incoming Buyer Offers */}
       <div className="space-y-4">
-        <h3 className="font-display text-xl font-semibold text-zinc-950">
+        <h3 className="font-display text-xl font-semibold text-zinc-950 dark:text-zinc-50">
           Kelgan takliflar ({allInquiries.length})
         </h3>
         {allInquiries.length === 0 ? (
-          <div className="bg-white border border-zinc-200 rounded-xl p-6 text-sm text-zinc-500">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 text-sm text-zinc-500 dark:text-zinc-400">
             Xaridorlardan kelgan narx takliflari va xabarlar shu yerda ko&apos;rinadi.
           </div>
         ) : (
-          <div className="bg-white border border-zinc-200 rounded-xl divide-y divide-zinc-200">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl divide-y divide-zinc-200 dark:divide-zinc-800">
             {allInquiries.map((inq) => (
               <div
                 key={inq.id}
                 className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
               >
                 <div className="space-y-1">
-                  <div className="text-xs text-zinc-500">
-                    {inq.listingTitle} · <span className="font-medium text-zinc-800">{inq.buyerName}</span> ·{' '}
+                  <div className="text-xs text-zinc-500 dark:text-zinc-400">
+                    {inq.listingTitle} · <span className="font-medium text-zinc-800 dark:text-zinc-200">{inq.buyerName}</span> ·{' '}
                     <span className="font-mono-num">{inq.buyerPhone}</span>
                   </div>
-                  <p className="text-sm text-zinc-800">{inq.message}</p>
+                  <p className="text-sm text-zinc-800 dark:text-zinc-200">{inq.message}</p>
                 </div>
 
                 <div className="flex items-center gap-4 shrink-0">
-                  <div className="font-mono-num text-base font-semibold text-zinc-950">
+                  <div className="font-mono-num text-base font-semibold text-zinc-950 dark:text-zinc-50">
                     {formatUsd(inq.offerUsd)}
                   </div>
                   {inq.status === 'pending' ? (
@@ -332,7 +332,7 @@ export function MyListingsView({
                         onClick={() =>
                           updateInquiryStatus(inq.listingId, inq.id, 'accepted')
                         }
-                        className="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-medium rounded-lg cursor-pointer"
+                        className="px-3 py-1.5 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-white text-white dark:text-zinc-950 text-xs font-medium rounded-lg cursor-pointer"
                       >
                         Qabul qilish
                       </button>
@@ -341,7 +341,7 @@ export function MyListingsView({
                         onClick={() =>
                           updateInquiryStatus(inq.listingId, inq.id, 'declined')
                         }
-                        className="px-3 py-1.5 bg-white border border-zinc-200 hover:border-zinc-300 text-zinc-700 text-xs font-medium rounded-lg cursor-pointer"
+                        className="px-3 py-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 text-zinc-700 dark:text-zinc-300 text-xs font-medium rounded-lg cursor-pointer"
                       >
                         Rad etish
                       </button>
@@ -350,8 +350,8 @@ export function MyListingsView({
                     <span
                       className={`text-xs font-medium ${
                         inq.status === 'accepted'
-                          ? 'text-emerald-700'
-                          : 'text-zinc-500'
+                          ? 'text-emerald-700 dark:text-emerald-400'
+                          : 'text-zinc-500 dark:text-zinc-400'
                       }`}
                     >
                       {inq.status === 'accepted' ? 'Qabul qilindi' : 'Rad etildi'}

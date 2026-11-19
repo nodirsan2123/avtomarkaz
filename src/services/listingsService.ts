@@ -14,6 +14,7 @@ import {
 } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../lib/firebase';
 import {
+  AdminRole,
   BodyStyle,
   CarCondition,
   CarListing,
@@ -482,6 +483,73 @@ export async function updateInquiryStatus(
     });
   } catch (error) {
     handleFirestoreError(error, OperationType.UPDATE, path);
+  }
+}
+
+export async function adminToggleListingStatus(
+  listingId: string,
+  nextStatus: 'active' | 'sold'
+): Promise<void> {
+  const path = `listings/${listingId}`;
+  try {
+    await updateDoc(doc(db, 'listings', listingId), {
+      status: nextStatus,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (error) {
+    handleFirestoreError(error, OperationType.UPDATE, path);
+  }
+}
+
+export function subscribeToAdmins(onData: (admins: AdminRole[]) => void) {
+  const path = 'admins';
+  return onSnapshot(
+    collection(db, 'admins'),
+    (snapshot) => {
+      const items: AdminRole[] = snapshot.docs.map((d) => {
+        const data = d.data();
+        return {
+          uid: String(data.uid ?? d.id),
+          note: data.note ? String(data.note) : undefined,
+          createdAtMs: toMillis(data.createdAt),
+        };
+      });
+      items.sort((a, b) => b.createdAtMs - a.createdAtMs);
+      onData(items);
+    },
+    (error) => {
+      handleFirestoreError(error, OperationType.LIST, path);
+    }
+  );
+}
+
+export async function grantAdminRole(uid: string, note: string): Promise<void> {
+  const cleanUid = uid.trim();
+  const cleanNote = note.trim().slice(0, 120);
+  if (!VALIDATION_LIMITS.idPattern.test(cleanUid) || cleanUid.length > 128) {
+    throw new Error("Foydalanuvchi UID formati noto'g'ri");
+  }
+  const path = `admins/${cleanUid}`;
+  try {
+    const payload: Record<string, unknown> = {
+      uid: cleanUid,
+      createdAt: serverTimestamp(),
+    };
+    if (cleanNote) {
+      payload.note = cleanNote;
+    }
+    await setDoc(doc(db, 'admins', cleanUid), payload);
+  } catch (error) {
+    handleFirestoreError(error, OperationType.CREATE, path);
+  }
+}
+
+export async function revokeAdminRole(uid: string): Promise<void> {
+  const path = `admins/${uid}`;
+  try {
+    await deleteDoc(doc(db, 'admins', uid));
+  } catch (error) {
+    handleFirestoreError(error, OperationType.DELETE, path);
   }
 }
 
