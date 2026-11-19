@@ -1,0 +1,323 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global safety net: default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global hardened primitives
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Validation Blueprints
+    function isValidUserProfile(data, userId) {
+      return data.keys().hasAll(['uid', 'displayName', 'email', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'displayName', 'email', 'phone', 'city', 'createdAt', 'updatedAt'])
+        && data.uid is string
+        && isValidId(data.uid)
+        && data.uid == request.auth.uid
+        && data.uid == userId
+        && data.displayName is string
+        && data.displayName.size() >= 1
+        && data.displayName.size() <= 80
+        && data.email is string
+        && data.email.size() >= 3
+        && data.email.size() <= 160
+        && (!('phone' in data) || (data.phone is string && data.phone.size() <= 24 && data.phone.matches('^(\\+998[0-9]{9})?$')))
+        && (!('city' in data) || (data.city is string && data.city.size() <= 48))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidCarListing(data) {
+      return data.keys().hasAll([
+          'sellerId', 'sellerName', 'brand', 'model', 'year', 'priceUsd',
+          'mileageKm', 'fuelType', 'transmission', 'bodyStyle', 'color',
+          'condition', 'city', 'description', 'imageUrl', 'presetKey',
+          'status', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'sellerId', 'sellerName', 'brand', 'model', 'year', 'priceUsd',
+          'mileageKm', 'fuelType', 'transmission', 'bodyStyle', 'color',
+          'condition', 'city', 'description', 'imageUrl', 'presetKey',
+          'status', 'createdAt', 'updatedAt'
+        ])
+        && data.sellerId is string
+        && isValidId(data.sellerId)
+        && data.sellerId == request.auth.uid
+        && data.sellerName is string
+        && data.sellerName.size() >= 1
+        && data.sellerName.size() <= 80
+        && data.brand is string
+        && data.brand.size() >= 1
+        && data.brand.size() <= 40
+        && data.model is string
+        && data.model.size() >= 1
+        && data.model.size() <= 60
+        && data.year is int
+        && data.year >= 1970
+        && data.year <= 2027
+        && data.priceUsd is int
+        && data.priceUsd >= 500
+        && data.priceUsd <= 1000000
+        && data.mileageKm is int
+        && data.mileageKm >= 0
+        && data.mileageKm <= 1500000
+        && data.fuelType is string
+        && data.fuelType in ['Benzin', 'Gibrid', 'Elektromobil', 'Gaz-Benzin', 'Dizel']
+        && data.transmission is string
+        && data.transmission in ['Avtomat', 'Mexanika', 'Variator', 'Robot']
+        && data.bodyStyle is string
+        && data.bodyStyle in ['Sedan', 'Krossover', 'Fastbek', 'Xetchbek', "Yo'ltanlamas"]
+        && data.color is string
+        && data.color.size() >= 1
+        && data.color.size() <= 32
+        && data.condition is string
+        && data.condition in ['Yangi', 'Minilgan']
+        && data.city is string
+        && data.city.size() >= 1
+        && data.city.size() <= 48
+        && data.description is string
+        && data.description.size() >= 10
+        && data.description.size() <= 1200
+        && data.imageUrl is string
+        && data.imageUrl.size() <= 240000
+        && data.presetKey is string
+        && data.presetKey in ['white_sedan', 'grey_suv', 'black_fastback', 'silver_camry', 'emerald_suv', 'slate_crossover']
+        && data.status is string
+        && data.status in ['active', 'sold']
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidListingContact(data) {
+      return data.keys().hasAll(['sellerId', 'phone', 'updatedAt'])
+        && data.keys().hasOnly(['sellerId', 'phone', 'telegram', 'updatedAt'])
+        && data.sellerId is string
+        && isValidId(data.sellerId)
+        && data.sellerId == request.auth.uid
+        && data.phone is string
+        && data.phone.size() >= 9
+        && data.phone.size() <= 24
+        && data.phone.matches('^\\+998[0-9]{9}$')
+        && (!('telegram' in data) || (data.telegram is string && data.telegram.size() <= 48))
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidListingInquiry(data, listingId) {
+      return data.keys().hasAll([
+          'listingId', 'listingTitle', 'sellerId', 'buyerId', 'buyerName',
+          'buyerPhone', 'offerUsd', 'message', 'status', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'listingId', 'listingTitle', 'sellerId', 'buyerId', 'buyerName',
+          'buyerPhone', 'offerUsd', 'message', 'status', 'createdAt', 'updatedAt'
+        ])
+        && data.listingId is string
+        && data.listingId == listingId
+        && isValidId(data.listingId)
+        && data.listingTitle is string
+        && data.listingTitle.size() >= 1
+        && data.listingTitle.size() <= 120
+        && data.sellerId is string
+        && isValidId(data.sellerId)
+        && data.buyerId is string
+        && isValidId(data.buyerId)
+        && data.buyerId != data.sellerId
+        && data.buyerName is string
+        && data.buyerName.size() >= 1
+        && data.buyerName.size() <= 80
+        && data.buyerPhone is string
+        && data.buyerPhone.size() >= 9
+        && data.buyerPhone.size() <= 24
+        && data.buyerPhone.matches('^\\+998[0-9]{9}$')
+        && data.offerUsd is int
+        && data.offerUsd >= 500
+        && data.offerUsd <= 1000000
+        && data.message is string
+        && data.message.size() >= 3
+        && data.message.size() <= 500
+        && data.status is string
+        && data.status in ['pending', 'accepted', 'declined']
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Users collection (PII isolated to owner)
+    match /users/{userId} {
+      allow get: if isValidId(userId) && isOwner(userId);
+      allow list: if false;
+      allow create: if isValidId(userId)
+        && isVerified()
+        && isOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(userId)
+        && isVerified()
+        && isOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'phone', 'city', 'updatedAt']);
+      allow delete: if isValidId(userId) && isOwner(userId);
+
+      // Saved favorites subcollection
+      match /favorites/{listingId} {
+        allow get: if isValidId(userId) && isValidId(listingId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId);
+        allow create: if isValidId(userId)
+          && isValidId(listingId)
+          && isVerified()
+          && isOwner(userId)
+          && incoming().keys().hasAll(['listingId', 'createdAt'])
+          && incoming().keys().hasOnly(['listingId', 'createdAt'])
+          && incoming().listingId == listingId
+          && incoming().createdAt == request.time
+          && exists(/databases/$(database)/documents/listings/$(listingId));
+        allow update: if false;
+        allow delete: if isValidId(userId) && isValidId(listingId) && isOwner(userId);
+      }
+    }
+
+    // Public car listings collection (zero PII)
+    match /listings/{listingId} {
+      allow get: if isValidId(listingId)
+        && (existing().status in ['active', 'sold'] || (isSignedIn() && existing().sellerId == request.auth.uid));
+      allow list: if resource.data.status in ['active', 'sold'];
+
+      allow create: if isValidId(listingId)
+        && isVerified()
+        && isValidCarListing(incoming())
+        && incoming().status == 'active'
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time
+        && existsAfter(/databases/$(database)/documents/listings/$(listingId)/contact/seller);
+
+      allow update: if isValidId(listingId)
+        && isVerified()
+        && existing().sellerId == request.auth.uid
+        && existing().status != 'sold'
+        && isValidCarListing(incoming())
+        && incoming().sellerId == existing().sellerId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          // Action 1: Edit vehicle details
+          (incoming().status == existing().status
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'brand', 'model', 'year', 'priceUsd', 'mileageKm', 'fuelType',
+              'transmission', 'bodyStyle', 'color', 'condition', 'city',
+              'description', 'imageUrl', 'presetKey', 'updatedAt'
+            ]))
+          ||
+          // Action 2: Mark listing as sold (terminal state)
+          (incoming().status == 'sold'
+            && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt']))
+        );
+
+      allow delete: if isValidId(listingId)
+        && isSignedIn()
+        && existing().sellerId == request.auth.uid;
+
+      // Isolated seller contact subcollection
+      match /contact/{contactId} {
+        allow get: if isValidId(listingId)
+          && isValidId(contactId)
+          && contactId == 'seller'
+          && isSignedIn();
+        allow list: if false;
+
+        allow create: if isValidId(listingId)
+          && isValidId(contactId)
+          && contactId == 'seller'
+          && isVerified()
+          && isValidListingContact(incoming())
+          && incoming().updatedAt == request.time
+          && getAfter(/databases/$(database)/documents/listings/$(listingId)).data.sellerId == request.auth.uid;
+
+        allow update: if isValidId(listingId)
+          && isValidId(contactId)
+          && contactId == 'seller'
+          && isVerified()
+          && isValidListingContact(incoming())
+          && incoming().sellerId == existing().sellerId
+          && incoming().updatedAt == request.time
+          && get(/databases/$(database)/documents/listings/$(listingId)).data.sellerId == request.auth.uid
+          && incoming().diff(existing()).affectedKeys().hasOnly(['phone', 'telegram', 'updatedAt']);
+
+        allow delete: if isValidId(listingId)
+          && isValidId(contactId)
+          && contactId == 'seller'
+          && isSignedIn()
+          && existing().sellerId == request.auth.uid;
+      }
+
+      // Buyer offers / inquiries subcollection
+      match /inquiries/{inquiryId} {
+        allow get: if isValidId(listingId)
+          && isValidId(inquiryId)
+          && isSignedIn()
+          && (existing().buyerId == request.auth.uid || existing().sellerId == request.auth.uid);
+
+        allow list: if isSignedIn()
+          && (resource.data.buyerId == request.auth.uid || resource.data.sellerId == request.auth.uid);
+
+        allow create: if isValidId(listingId)
+          && isValidId(inquiryId)
+          && isVerified()
+          && isValidListingInquiry(incoming(), listingId)
+          && incoming().buyerId == request.auth.uid
+          && incoming().status == 'pending'
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && exists(/databases/$(database)/documents/listings/$(listingId))
+          && get(/databases/$(database)/documents/listings/$(listingId)).data.status == 'active'
+          && get(/databases/$(database)/documents/listings/$(listingId)).data.sellerId == incoming().sellerId;
+
+        allow update: if isValidId(listingId)
+          && isValidId(inquiryId)
+          && isVerified()
+          && existing().sellerId == request.auth.uid
+          && existing().status == 'pending'
+          && isValidListingInquiry(incoming(), listingId)
+          && incoming().listingId == existing().listingId
+          && incoming().sellerId == existing().sellerId
+          && incoming().buyerId == existing().buyerId
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().status in ['accepted', 'declined']
+          && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt']);
+
+        allow delete: if isValidId(listingId)
+          && isValidId(inquiryId)
+          && isSignedIn()
+          && (existing().buyerId == request.auth.uid || existing().sellerId == request.auth.uid);
+      }
+    }
+  }
+}

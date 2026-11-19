@@ -1,0 +1,306 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private user account profile containing contact details.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 160
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 24,
+          "pattern": "^(\\+998[0-9]{9})?$"
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 48
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "displayName", "email", "createdAt", "updatedAt"]
+    },
+    "CarListing": {
+      "title": "CarListing",
+      "description": "Publicly browsable automotive sales listing without private PII.",
+      "type": "object",
+      "properties": {
+        "sellerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "sellerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "brand": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "year": {
+          "type": "integer"
+        },
+        "priceUsd": {
+          "type": "integer"
+        },
+        "mileageKm": {
+          "type": "integer"
+        },
+        "fuelType": {
+          "type": "string",
+          "enum": ["Benzin", "Gibrid", "Elektromobil", "Gaz-Benzin", "Dizel"]
+        },
+        "transmission": {
+          "type": "string",
+          "enum": ["Avtomat", "Mexanika", "Variator", "Robot"]
+        },
+        "bodyStyle": {
+          "type": "string",
+          "enum": ["Sedan", "Krossover", "Fastbek", "Xetchbek", "Yo'ltanlamas"]
+        },
+        "color": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "condition": {
+          "type": "string",
+          "enum": ["Yangi", "Minilgan"]
+        },
+        "city": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 48
+        },
+        "description": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 1200
+        },
+        "imageUrl": {
+          "type": "string",
+          "maxLength": 240000
+        },
+        "presetKey": {
+          "type": "string",
+          "enum": ["white_sedan", "grey_suv", "black_fastback", "silver_camry", "emerald_suv", "slate_crossover"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "sold"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "sellerId",
+        "sellerName",
+        "brand",
+        "model",
+        "year",
+        "priceUsd",
+        "mileageKm",
+        "fuelType",
+        "transmission",
+        "bodyStyle",
+        "color",
+        "condition",
+        "city",
+        "description",
+        "imageUrl",
+        "presetKey",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ListingContact": {
+      "title": "ListingContact",
+      "description": "Isolated seller contact details for a specific car listing, readable only by signed-in users.",
+      "type": "object",
+      "properties": {
+        "sellerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 9,
+          "maxLength": 24,
+          "pattern": "^\\+998[0-9]{9}$"
+        },
+        "telegram": {
+          "type": "string",
+          "maxLength": 48
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["sellerId", "phone", "updatedAt"]
+    },
+    "ListingInquiry": {
+      "title": "ListingInquiry",
+      "description": "Offer or contact message submitted by an authenticated buyer to a seller.",
+      "type": "object",
+      "properties": {
+        "listingId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "listingTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "sellerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "buyerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "buyerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "buyerPhone": {
+          "type": "string",
+          "minLength": 9,
+          "maxLength": 24,
+          "pattern": "^\\+998[0-9]{9}$"
+        },
+        "offerUsd": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 500
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "accepted", "declined"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "listingId",
+        "listingTitle",
+        "sellerId",
+        "buyerId",
+        "buyerName",
+        "buyerPhone",
+        "offerUsd",
+        "message",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "FavoriteItem": {
+      "title": "FavoriteItem",
+      "description": "A user's saved car listing reference.",
+      "type": "object",
+      "properties": {
+        "listingId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["listingId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Private user account documents keyed by Firebase Auth UID."
+    },
+    "/listings/{listingId}": {
+      "schema": {
+        "$ref": "#/entities/CarListing"
+      },
+      "description": "Publicly browsable vehicle listings."
+    },
+    "/listings/{listingId}/contact/{contactId}": {
+      "schema": {
+        "$ref": "#/entities/ListingContact"
+      },
+      "description": "Seller contact phone and Telegram handle isolated from public listing documents."
+    },
+    "/listings/{listingId}/inquiries/{inquiryId}": {
+      "schema": {
+        "$ref": "#/entities/ListingInquiry"
+      },
+      "description": "Buyer offers and inquiries scoped to a listing."
+    },
+    "/users/{userId}/favorites/{listingId}": {
+      "schema": {
+        "$ref": "#/entities/FavoriteItem"
+      },
+      "description": "Saved favorite car listings per user."
+    }
+  }
+}

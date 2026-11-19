@@ -1,0 +1,6 @@
+{
+  "name": "AvtoMarkaz — Avtomobil e'lonlari portali",
+  "description": "O'zbekiston bo'ylab avtomobillarni qulay sotish va xarid qilish uchun zamonaviy e'lonlar platformasi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
